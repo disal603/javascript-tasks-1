@@ -1,174 +1,186 @@
-function getTimeRim(info, t0,t1, t2, t3)
+function getTimeRim(number_times, digit_Arabic_small,digit_Arabic_medium, digit_Arabic_large, digital_Arabic_big)
 {
-    var text= new Array();
-switch (info) 
-{
-case 0:
-    text = t0;
-	break;	
-case 1:
-    text = t1;
-	break;	
-case 2:
-    text = glue(t1, t1);
-	break;	
-case 3:
-	var p1 = glue(t1, t1);
-    text = glue(p1, t1);
-    break;		
-case 4:
-    text = glue(t1, t2);
-	break;
-case 5:
-    text = t2;
-	break;	
-case 6:
-    text = glue(t2, t1);
-	break;	
-case 7:
-	var p1 = glue(t2, t1);
-    text = glue(p1, t1);;	
-	break;	
-case 8:
-	var p1 = glue(t2, t1);
-	var p2 = glue(p1, t1);
-    text = glue(p2, t1);
-	break;	
-case 9:
-    text = glue(t1, t3);
-	break;
-}
-    return text;	
+//    Функция ставит соответсвие число и его римское представление
+//    number_times - Число для преобразование
+//    digit_Arabic_small- римская цифра самая наименьшая для замены
+//    digit_Arabic_medium - римская цифра средняя для замены
+//    digit_Arabic_large- римская цифра выше среднего для замены
+//    digit_Arabic_big- римская арабское число для замены
+//    temporary_variable_for_gluing_  - временные переменные для склейки
+    var text= [];
+    switch (number_times)
+        {
+        case 0:
+            text = digit_Arabic_small;
+            break;
+        case 1:
+            text = digit_Arabic_medium;
+            break;
+        case 2:
+            text = glue(digit_Arabic_medium, digit_Arabic_medium);
+	        break;
+        case 3:
+	        var temporary_variable_for_gluing_1 = glue(digit_Arabic_medium, digit_Arabic_medium);
+            text = glue(temporary_variable_for_gluing_1, digit_Arabic_medium);
+            break;
+        case 4:
+            text = glue(digit_Arabic_medium, digit_Arabic_large);
+	        break;
+        case 5:
+            text = digit_Arabic_large;
+	        break;
+        case 6:
+            text = glue(digit_Arabic_large, digit_Arabic_medium);
+	        break;
+        case 7:
+	        var temporary_variable_for_gluing_1 = glue(digit_Arabic_large, digit_Arabic_medium);
+            text = glue(temporary_variable_for_gluing_1, digit_Arabic_medium);;
+	        break;
+        case 8:
+	        var temporary_variable_for_gluing_1 = glue(digit_Arabic_large, digit_Arabic_medium);
+	        var temporary_variable_for_gluing_2 = glue(temporary_variable_for_gluing_1, digit_Arabic_medium);
+            text = glue(temporary_variable_for_gluing_2, digit_Arabic_medium);
+	        break;
+        case 9:
+            text = glue(digit_Arabic_medium, digital_Arabic_big);
+	        break;
+        }
+    return text;
 }
 
-function glue (mas1, mas2)
+function glue (digit_Rim_1, digit_Rim_2)
 {
-	var mas_otv= new Array();
-	for  (var i = 0; i < mas1.length; i++)
-	{
-        mas_otv[i] = mas1[i]+mas2[i]
-	}
-	return mas_otv;
+    // функция glue- склеивает два массива (тоесть получает слитное изображение из двух римских числе) "построчно"
+    //digit_Rim_* - число для склейки
+    // digit_Rim - конечное склеиное число
+    var digit_Rim= [];
+    for  (var i = 0; i < digit_Rim_1.length; i++)
+    {
+        digit_Rim[i] = digit_Rim_1[i]+digit_Rim_2[i];
+    }
+    return digit_Rim;
+}
+
+function isCorrectTime (hourse, minutes)
+{
+//    Проверка времени на корректность
+    if ((hourse<25) && (minutes<61) && (hourse>-1) && (minutes>-1))
+    {return true}
+    else
+    {return false}
+}
+
+function get_Time_arabic (time)
+{
+//     переводит время часы или минуты. Куском из числа в римскую систему
+    var time_units, time_dozens, text_time_otvet,text_time_otvet2;
+    time_dozens =(time - (time%10))/10;
+    time_units = time%10;
+    text_time_otvet = getTimeRim(time_dozens, emptiness, time10, time50, time100);
+	  text_time_otvet = glue(text_time_otvet, getTimeRim(time_units, emptiness, time1, time5, time10));
+    if (text_time_otvet[0].length == 8)
+    {
+        text_time_otvet = time0;
+    }
+    return text_time_otvet;
 }
 
 var hours = process.argv[2];
 var minutes = process.argv[3];
 
-if ((hours<25) && (minutes<61) && (hours>-1) && (minutes>-1))
+if (isCorrectTime (hours, minutes))
 {
-var time0 = 
-  [" _           _ ",    
-   "(_) _       (_)",   
-   "(_)(_)_     (_)",   
-   "(_)  (_)_   (_)",   
-   "(_)    (_)_ (_)",   
-   "(_)      (_)(_)",   
-   "(_)         (_)",   
-   "(_)         (_)"   
-     ]
-  time1 =
-   ["   _  _  _  ",     
-    "  (_)(_)(_) ",    
-    "     (_)    ",   
-    "     (_)    ", 
-    "     (_)    ", 
+var time0 =
+    [" _           _ ",
+    "(_) _       (_)",
+    "(_)(_)_     (_)",
+    "(_)  (_)_   (_)",
+    "(_)    (_)_ (_)",
+    "(_)      (_)(_)",
+    "(_)         (_)",
+    "(_)         (_)"
+    ]
+    time1 =
+    ["   _  _  _  ",
+    "  (_)(_)(_) ",
+    "     (_)    ",
+    "     (_)    ",
+    "     (_)    ",
     "     (_)    ",
     "   _ (_) _  ",
     "  (_)(_)(_) "
-    ],              
-  time5 = 
-   [" _           _ ",    
-    "(_)         (_)",  
-    "(_)         (_)",   
-    "(_)_       _(_)",   
-    "  (_)     (_)  ",   
-    "   (_)   (_)   ",   
-    "    (_)_(_)    ",   
+    ],
+    time5 =
+    [" _           _ ",
+    "(_)         (_)",
+    "(_)         (_)",
+    "(_)_       _(_)",
+    "  (_)     (_)  ",
+    "   (_)   (_)   ",
+    "    (_)_(_)    ",
     "      (_)      ",
 	],
-  time10 = 
-  [" _           _ ",  
-   "(_)_       _(_)", 
-   "  (_)_   _(_)  ",
-   "    (_)_(_)    ",
-   "     _(_)_     ",
-   "   _(_) (_)_   ",
-   " _(_)     (_)_ ",
-   "(_)         (_)"
-]   ,
-  time50 =
-["   _             ",   
- "  (_)            ",  
- "  (_)            ",   
- "  (_)            ",  
- "  (_)            ",   
- "  (_)            ",  
- "  (_) _  _  _  _ ",  
- "  (_)(_)(_)(_)(_)"   
+    time10 =
+    [" _           _ ",
+    "(_)_       _(_)",
+    "  (_)_   _(_)  ",
+    "    (_)_(_)    ",
+    "     _(_)_     ",
+    "   _(_) (_)_   ",
+    " _(_)     (_)_ ",
+    "(_)         (_)"
+    ],
+    time50 =
+    ["   _             ",
+    "  (_)            ",
+    "  (_)            ",
+    "  (_)            ",
+    "  (_)            ",
+    "  (_)            ",
+    "  (_) _  _  _  _ ",
+    "  (_)(_)(_)(_)(_)"
 	],
-  time100 = 
-["      _  _  _    ",   
- "   _ (_)(_)(_) _ ",   
- "  (_)         (_)",   
- "  (_)            ",   
- "  (_)            ",   
- "  (_)          _ ",   
- "  (_) _  _  _ (_)",   
- "     (_)(_)(_)   "   
+    time100 =
+    ["      _  _  _    ",
+     "   _ (_)(_)(_) _ ",
+     "  (_)         (_)",
+     "  (_)            ",
+     "  (_)            ",
+     "  (_)          _ ",
+     "  (_) _  _  _ (_)",
+     "     (_)(_)(_)   "
 	],
-  spase = 
-	["                     ", 
-	 "         _  _        ", 
-	 "        (_)(_)       ", 
-	 "        (_)(_)       ", 
-	 "         _  _        ", 
-	 "        (_)(_)       ", 
-	 "        (_)(_)       ",
-	 "                     "
+    delimiter =
+	["                     ",
+	"         _  _        ",
+	"        (_)(_)       ",
+	"        (_)(_)       ",
+	"         _  _        ",
+	"        (_)(_)       ",
+	"        (_)(_)       ",
+	"                     "
 	];
-  undef = 	 
-	["    ", 
-	 "    ", 
-	 "    ", 
-	 "    ", 
-	 "    ", 
-	 "    ", 
-	 "    ",
-	 "    "
+	emptiness =
+    ["    ",
+    "    ",
+    "    ",
+	"    ",
+	"    ",
+	"    ",
+	"    ",
+	"    "
 	];
-	    
-	
-var text_time_rim =new Array();
-var hours1, hours2, minutes1, minutes2;
 
-    hours1 =(hours - (hours%10))/10;
-    hours2 = hours%10;
-
-    text_time_rim = getTimeRim(hours1, undef, time10, time50, time100);
-    text_time_rim = glue(text_time_rim, getTimeRim(hours2, time0, time1, time5, time10));
-    text_time_rim = glue(text_time_rim, spase);
-
-    minutes1 =(minutes - (minutes%10))/10;
-    minutes2 = minutes%10;
-
- var text_minut = new Array();
-    text_minut = getTimeRim(minutes1, undef, time10, time50, time100);
-    text_minut = glue(text_minut, getTimeRim(minutes2, undef, time1, time5, time10));
-    if (text_minut[0].length == 8)
+    var text_time_rim =[];
+    text_time_rim = get_Time_arabic(hours);
+    text_time_rim = glue(text_time_rim, delimiter);
+    text_time_rim = glue(text_time_rim, get_Time_arabic(minutes));
+    for  (var i = 0; i < text_time_rim.length; i++)
     {
-        text_time_rim = glue(text_time_rim, time0);	
+        console.log(text_time_rim[i]);
     }
-    else 
-    {
-	text_time_rim = glue(text_time_rim, text_minut)
-    }
-	
-for  (var i = 0; i < text_time_rim.length; i++)
-	{
-        console.log(text_time_rim[i]); 
-	}
 }
 else
 {
-	console.log("Время указано не верно");
+    console.log("Время указано не верно");
 }
