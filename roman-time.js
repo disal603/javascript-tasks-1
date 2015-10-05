@@ -52,37 +52,32 @@ function glue (digitRim1, digitRim2){
     //digitRim* - число для склейки
     // digitRim - конечное склеиное число
     var digitRim = [];
-    for  (var i = 0; i < digitRim1.length; i++)
-    {
-        digitRim[i] = digitRim1[i]+digitRim2[i];
+    for  (var i = 0; i < digitRim1.length; i++) {
+        digitRim[i] = digitRim1[i] + digitRim2[i];
     }
     return digitRim;
 }
 
 function isCorrectTime (hourse, minutes){
 //    Проверка времени на корректность
-    if ((hourse<25) && (minutes<61) && (hourse>-1) && (minutes>-1)) {
-        if ((hourse == 24) && (minutes>0)) {
-            return false;
-        } else {
-            return true;
-        }
-    } else {
+    if (hourse < 24 && minutes < 60 && hourse > -1 && minutes > -1) {
+        return true;
+    }else {
         return false;
     }
 }
 
-function getTimearabic (time){
+function getTimeArabic (time){
 //     переводит время часы или минуты. Куском из числа в римскую систему
-    var timeUnits, timeDozens, textTimeOtvet;
+    var timeUnits, timeDozens, textTimeAnswer;
     timeDozens =(time - (time%10))/10;
     timeUnits = time%10;
-    textTimeOtvet = getTimeRim(timeDozens, emptiness, time10, time50, time100);
-    textTimeOtvet = glue(textTimeOtvet, getTimeRim(timeUnits, emptiness, time1, time5, time10));
-    if (textTimeOtvet[0].length == 8) {
-        textTimeOtvet = time0;
+    textTimeAnswer = getTimeRim(timeDozens, emptiness, time10, time50, time100);
+    textTimeAnswer = glue(textTimeAnswer, getTimeRim(timeUnits, emptiness, time1, time5, time10));
+    if (textTimeAnswer[0].length == 8) {
+        textTimeAnswer = time0;
     }
-    return textTimeOtvet;
+    return textTimeAnswer;
 }
 
 var hours = process.argv[2];
